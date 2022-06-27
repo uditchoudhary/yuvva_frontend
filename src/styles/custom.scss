@@ -1,0 +1,18 @@
+:root {
+    --custom-primary1: #000000;
+    --custom-primary2: #4a4a4a;
+    --custom-secondary: #d2d2d2;
+    --custom-tertiary: #eae7e0;
+    --logo-color: #b60c20;
+}
+
+* {
+    // font-family:basier_squarebold;
+    font-family: "Gill Sans",
+    sans-serif;
+    
+}
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+
