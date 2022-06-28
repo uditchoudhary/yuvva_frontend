@@ -25,7 +25,8 @@ const CategoryRender = ({ direction, category }) => {
       >
         <div className="col-sm-5 col-lg-4 ">
           <img
-            src="/static/images/probiotics.webp"
+            // src="/static/images/probiotics.webp"
+            src={category_images[0].image_url}
             className="d-block mx-lg-auto img-fluid"
             alt="Bootstrap Themes"
             loading="lazy"

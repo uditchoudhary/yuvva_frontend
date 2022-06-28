@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Store/Actions/CartActions";
 
 const CardLink = styled(Link)`
@@ -71,11 +71,9 @@ const SizeMlSpan = styled.span`
   margin-right: 2px;
 `;
 
-const handleOnClick = (item) => {};
-
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
-
+  const isLoggedIn = useSelector(state =>  state.userState.isLoggedIn)
   const {
     item_images,
     item_size_price_ml,
@@ -98,6 +96,9 @@ const ProductCard = ({ product }) => {
     image: item_images[0].image_url,
   };
   const handleOnClick = (item) => {
+    if (!isLoggedIn) {
+      alert("Login before you add items to cart.");
+    }
     dispatch(addToCart(item));
   };
   return (

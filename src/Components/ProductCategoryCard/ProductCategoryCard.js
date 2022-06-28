@@ -8,7 +8,7 @@ import { instance as API } from "../../services/axiosConfig";
 const Wrapper = styled.div`
   width: 100%;
   height: 30px;
-  border: 0.1px solid black;
+  // border: 0.1px solid black;
 `;
 
 const ProductCategoryCard = ({ productCategory }) => {
@@ -38,11 +38,13 @@ const ProductCategoryCard = ({ productCategory }) => {
   return (
     <BodyContainer>
       <Wrapper>
-        <h4 className="text-lefy">{productCategory_name}</h4>
+        <h4 className="text-left">
+          {productCategory_name}
+        </h4>
       </Wrapper>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {productCategoryItems?.map((product) => {
-          return <ProductCard product={product} />;
+          return <ProductCard product={product} key={product._id} />;
         })}
       </div>
     </BodyContainer>
