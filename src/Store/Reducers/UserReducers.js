@@ -5,6 +5,7 @@ import setCookies from "../../Utilities/Cookies/setCookies";
 import * as actions from "../Actions/ActionTypes";
 
 const UserReducers = (state, action) => {
+  console.log("User REducer", state, action);
   switch (action.type) {
     case actions.LOG_IN:
       setCookies(LOGIN_STATUS, true);
@@ -21,6 +22,21 @@ const UserReducers = (state, action) => {
       return {
         ...state,
         login_fetch_loading: action.payload,
+      };
+    case actions.SET_USER_PROFILE:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case actions.PROFILE_FETCH_LOADING:
+      return {
+        ...state,
+        profile_fetch_loading: action.payload,
+      };
+    case actions.PROFILE_FETCH_FAILURE:
+      return {
+        ...state,
+        profile_fetch_failure: action.payload,
       };
     default:
       return { ...state, isLoggedIn: getCookies(LOGIN_STATUS) };

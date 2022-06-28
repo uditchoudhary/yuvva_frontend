@@ -96,6 +96,7 @@ const CartPage = () => {
   const cartData = useSelector((state) => state.cartState.cartData);
   const cartTotalItems = useSelector((state) => state.cartState.cartTotalItems);
   const cartTotalCost = useSelector((state) => state.cartState.cartTotalCost);
+
   const cartFetchLoading = useSelector(
     (state) => state.cartState.cartFetchLoading
   );
@@ -211,7 +212,7 @@ const CartPage = () => {
                 className="collapse collapse-horizontal"
                 id="collapseCheckout"
               >
-                <CheckoutComponent />
+                <CheckoutComponent/>
               </RightContainer>
             </ParentContainer>
           ) : (

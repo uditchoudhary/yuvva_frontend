@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useEffect } from "react";
 import { addOrders } from "../../Store/Actions/OrderActions";
 const Wrapper = styled.div`
   display: flex;
@@ -58,6 +56,7 @@ const PayTmWrapper = styled.button`
   span {
     margin-right: 10px;
   }
+  width: 100%;
 `;
 
 const ChangeAddress = styled.button`
@@ -72,7 +71,7 @@ const CheckoutComponent = () => {
   const cartTotalCost = useSelector((state) => state.cartState.cartTotalCost);
   const cartData = useSelector((state) => state.cartState.cartData);
   const order_id = Math.floor(Math.random() * 100000);
-  const user = useSelector((state) => state.userState);
+  const user = useSelector((state) => state.userState.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -81,7 +80,7 @@ const CheckoutComponent = () => {
   };
 
   const orderDetails = {
-    customerId: "6276c6d46fc47744c76714d2",
+    customerId: user?.userId,
     orderId: order_id,
     orderDate: "Pending",
     orderTotal: cartTotalCost,
@@ -93,28 +92,35 @@ const CheckoutComponent = () => {
   const orderCheckout = (body) => {
     dispatch(addOrders(body));
   };
-
+  console.log(
+    "useSelector",
+    cartData,
+    cartTotalCost,
+    cartTotalItems,
+    user,
+    orderDetails
+  );
   return (
     <Wrapper>
-      <UserDetails>
-        <UserName>Udit Choudhary</UserName>
-        <UserEmail>user@test.com</UserEmail>
-        <UserPhone>0226911020</UserPhone>
-        <UserAddress>
-          <sup>
-            <b>Address:</b>
-          </sup>
-          <span>240D Blockhouse Bay Road, Avondale</span>
-          <span>Auckland, New Zealand</span>
-          <span>0600</span>
-          <ChangeAddress
-            className="btn btn-sm btn-danger"
-            onClick={() => handleModifyAddress()}
-          >
-            Modify
-          </ChangeAddress>
-        </UserAddress>
-      </UserDetails>
+      {user && (
+        <UserDetails>
+          <UserName className="text-uppercase">{user.name}</UserName>
+          <UserEmail>{user.email}</UserEmail>
+          <UserPhone>{user.phone}</UserPhone>
+          <UserAddress>
+            <sup>{user.address && <b>Address:</b>}</sup>
+            <span>{user.address?.line1}</span>
+            <span>{user.address?.line2}</span>
+            <span>{user.address?.line3}</span>
+            <ChangeAddress
+              className="btn btn-sm btn-danger"
+              onClick={() => handleModifyAddress()}
+            >
+              Modify
+            </ChangeAddress>
+          </UserAddress>
+        </UserDetails>
+      )}
       <TotalItemsWrapper>
         <span>Total Items:</span> <TotalItems>{cartTotalItems}</TotalItems>
       </TotalItemsWrapper>
@@ -122,19 +128,21 @@ const CheckoutComponent = () => {
         <span>Total Cost:</span>{" "}
         <TotalItems>&#x20B9; {cartTotalCost}</TotalItems>
       </TotalAmountWrapper>
-      <form action={process.env.REACT_APP_PAYTM+`payment`} method="POST">
-        <input type="hidden" name="cost" value={orderDetails.orderTotal} />
-        <input type="hidden" name="userId" value={orderDetails.customerId} />
-        <input type="hidden" name="email" value="test@abc.com" />
-        <input type="hidden" name="phone" value="22001203" />
-        <input type="hidden" name="orderId" value={orderDetails.orderId} />
+      <form action={process.env.REACT_APP_PAYTM + `payment`} method="POST">
+        <div>
+          <input type="hidden" name="cost" value={orderDetails.orderTotal} />
+          <input type="hidden" name="userId" value={orderDetails.customerId} />
+          <input type="hidden" name="email" value="test@abc.com" />
+          <input type="hidden" name="phone" value="22001203" />
+          <input type="hidden" name="orderId" value={orderDetails.orderId} />
+        </div>
         <PayTmWrapper
           className="btn btn-sm btn-primary"
           onClick={() => orderCheckout(orderDetails)}
         >
           <span>Pay with</span>
           <svg
-            enable-background="new 0 0 512 512"
+            enableBackground="new 0 0 512 512"
             id="Layer_1"
             version="1.1"
             width="60px"
