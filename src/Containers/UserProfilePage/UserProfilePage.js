@@ -1,11 +1,9 @@
 import BodyContainer from "../BodyContainer";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {
-  getUserProfile,
-} from "../../Store/Actions/UserActions";
+import { getUserProfile } from "../../Store/Actions/UserActions";
 
 const ProfileRow = styled.div`
   width: 80%;
@@ -74,10 +72,12 @@ const AddressFormUl = styled.ul`
 const UserProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoggedIn, profile_fetch_loading, user } =
-    useSelector((state) => state.userState);
-  const [enableAddressOption, setEnableAddressOption] = useState(false);
-
+  const { isLoggedIn, profile_fetch_loading, user } = useSelector(
+    (state) => state.userState
+  );
+  const handleUserUpdate = (event) => {
+ 
+  };
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
@@ -118,82 +118,11 @@ const UserProfilePage = () => {
               <StyledPara>{user.phone}</StyledPara>
               <StyledPara>{user.isAdmin && "Admin"}</StyledPara>
               {user.address && (
-                !enableAddressOption ? (
-                  <AddressFormUl>
-                    <li>{user.address.line1}</li>
-                    <li>{user.address.line2}</li>
-                    <li>{user.address.line3}</li>
-                    <li>
-                      {user.address[0]}
-                      <StyledButton
-                        onClick={() => {
-                          setEnableAddressOption(true);
-                          // setAddressInputs({});
-                        }}
-                        className="btn btn-sm btn-secondary"
-                      >
-                        Edit Address
-                      </StyledButton>
-                    </li>
-                  </AddressFormUl>
-                ) : (
-                  <AddressFormUl>
-                    <form>
-                      <li>
-                        <label>
-                          <input
-                            type="text"
-                            name="line1"
-                            // value={addressInputs.line1 || user.address.line1}
-                            // onChange={handleAddressChange}
-                          />
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input
-                            type="text"
-                            name="line2"
-                            // value={addressInputs.line2 || user.address.line2}
-                            // onChange={handleAddressChange}
-                          />
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input
-                            type="text"
-                            name="line3"
-                            // value={addressInputs.line3 || user.address.line3}
-                            // onChange={handleAddressChange}
-                          />
-                        </label>
-                      </li>
-                      <li>
-                        <input
-                          type="button"
-                          value="Submit"
-                          className="addressEditButton"
-                          // onClick={(event) =>
-                          //   handleAddress(event, {
-                          //     address: {
-                          //       line1: addressInputs.line1,
-                          //       line2: addressInputs.line2,
-                          //       line3: addressInputs.line3,
-                          //     },
-                          //   })
-                          // }
-                        />
-                        <input
-                          type="button"
-                          value="Cancel"
-                          className="addressEditButton"
-                          onClick={() => setEnableAddressOption(false)}
-                        />
-                      </li>
-                    </form>
-                  </AddressFormUl>
-                )
+                <AddressFormUl>
+                  <li>{user.address.line1}</li>
+                  <li>{user.address.line2}</li>
+                  <li>{user.address.line3}</li>
+                </AddressFormUl>
               )}
               <StyledButton
                 type="button"
@@ -203,8 +132,127 @@ const UserProfilePage = () => {
               >
                 Update Details
               </StyledButton>
-
-
+              <div
+                className="modal fade"
+                id="updateDetailsModal"
+                tabIndex="-1"
+                role="dialog"
+                aria-labelledby="updateDetailsModalTitle"
+                aria-hidden="true"
+              >
+                <div
+                  className="modal-dialog modal-dialog-centered"
+                  role="document"
+                >
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="page-title">Update Details</h4>
+                      <button
+                        type="button"
+                        className="close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <form onSubmit={handleUserUpdate}>
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="name"
+                                placeholder="What's your full name?"
+                              />
+                              <label htmlFor="name">Full Name</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                value={user.email}
+                                disabled={true}
+                              />
+                              <label htmlFor="email">Email address</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="phone"
+                                className="form-control"
+                                id="phone"
+                              />
+                              <label htmlFor="phone">Phone</label>
+                            </div>
+                          </div>
+                        </div>
+                        Addres:
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="line1"
+                                className="form-control"
+                                id="line1"
+                              />
+                              <label htmlFor="line1">address Line 1</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="line2"
+                                className="form-control"
+                                id="line2"
+                              />
+                              <label htmlFor="line2">address Line 2</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md">
+                            <div className="form-floating">
+                              <input
+                                type="line3"
+                                className="form-control"
+                                id="line3"
+                              />
+                              <label htmlFor="line3">address Line 3</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col text-center">
+                            <div className="modal-footer">
+                              <button
+                                type="submit"
+                                className="btn btn-primary"
+                                data-bs-dismiss="modal"
+                                // onClick={handleUserUpdate}
+                              >
+                                Save Details
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </ProfileCol>
           </ProfileRow>
         )}

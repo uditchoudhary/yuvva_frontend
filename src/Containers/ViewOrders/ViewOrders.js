@@ -56,7 +56,7 @@ const ViewOrders = () => {
     <BodyContainer>
       <h3 className="page-title"> Order History </h3>
       {orders?.length > 0 ? (
-        <table class="table">
+        <table className="table">
           <thead>
             <tr>
               <th scope="col">Order #</th>
@@ -81,7 +81,7 @@ const ViewOrders = () => {
                   <td>
                     <StyledUl>
                       {order.orderItem.map((item) => {
-                        return <li>{item.item_name}</li>;
+                        return <li key={item.itemId}>{item.item_name}</li>;
                       })}
                     </StyledUl>
                   </td>
